@@ -35,6 +35,7 @@ public class ExceptionHandler {
     public Map<String,String> handleIncorrectResultSizeDataAccessException (Exception ex)
     {
         Map<String, String> error= new HashMap<>();
+        error.put("Somthing went wrong!!",ex.getMessage());
         return  error;
     }
 
