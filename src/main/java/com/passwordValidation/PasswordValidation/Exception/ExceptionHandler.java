@@ -31,11 +31,12 @@ public class ExceptionHandler {
         Listoferrors.put("ErrorMessage",ex.getMessage());
             return Listoferrors;
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     public Map<String,String> handleIncorrectResultSizeDataAccessException (Exception ex)
     {
         Map<String, String> error= new HashMap<>();
-        error.put("Somthing went wrong!!",ex.getMessage());
+        error.put("Something went wrong!!",ex.getMessage());
         return  error;
     }
 

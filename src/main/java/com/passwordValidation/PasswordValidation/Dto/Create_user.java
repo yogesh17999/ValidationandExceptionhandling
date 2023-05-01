@@ -1,11 +1,14 @@
 package com.passwordValidation.PasswordValidation.Dto;
 
+import com.passwordValidation.PasswordValidation.Model.Address;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,4 +30,6 @@ public class Create_user {
     private String password;
     private String reenter_password;
     private String user_type;
+    @NotBlank
+    private List<Address> address;
 }

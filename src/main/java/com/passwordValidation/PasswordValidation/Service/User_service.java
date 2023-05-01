@@ -1,11 +1,15 @@
 package com.passwordValidation.PasswordValidation.Service;
 
+import com.passwordValidation.PasswordValidation.Dto.ApiMessage;
 import com.passwordValidation.PasswordValidation.Dto.Create_user;
 import com.passwordValidation.PasswordValidation.Dto.Updaterequest;
 import com.passwordValidation.PasswordValidation.Exception.Usernamenotfoundexception;
+import com.passwordValidation.PasswordValidation.Mapper.Usermapping;
 import com.passwordValidation.PasswordValidation.Model.User;
 import com.passwordValidation.PasswordValidation.Repository.User_repo;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,59 +19,55 @@ public class User_service {
 
     @Autowired
     User_repo repo;
+    @Autowired
+    Usermapping usermapping;
 
 
-    public User Createuser(Create_user request) {
-        System.out.println(request.getUser_mobile() + " " +request.getReenter_password());
-        User user = User.build(0, request.getUsername(), request.getEmail(),request.getUser_mobile(), request.getGender(), request.getAge(), request.getPassword(),request.getReenter_password(), request.getUser_type());
+    public ApiMessage  Createuser(Create_user request) {
+     //   System.out.println(request.getUser_mobile() + " " +request.getReenter_password());
+        //User user = User.build(0, request.getUsername(), request.getEmail(),request.getUser_mobile(), request.getGender(), request.getAge(), request.getPassword(),request.getReenter_password(), request.getUser_type());
 
         System.out.println(request.getUsername());
-        repo.save(user);
-        return user;
+        repo.save(usermapping.Create_usertoUser(request));
+        return new ApiMessage(HttpStatus.CREATED, "user successfully registered!!" , request);
     }
 
-    public User getuserbyusername(String username) throws Usernamenotfoundexception {
+    public ApiMessage getuserbyusername(String username) throws Usernamenotfoundexception {
         System.out.println(username);
         if (repo.existsByUsername(username)){
-            return repo.findByUsername(username);
+            return    new ApiMessage(HttpStatus.OK,  usermapping.Usertouserdto( repo.findByUsername(username)));
         }
         else
         {
-            throw  new Usernamenotfoundexception("Username does not exist!!");
-
+            return  new ApiMessage(HttpStatus.BAD_REQUEST,"user not found, please enter correct username!!");
         }
     }
 
-    public boolean deleteuser(String username, String email) throws Usernamenotfoundexception{
+    public ApiMessage deleteuser(String username, String email) throws Usernamenotfoundexception{
         if (repo.existsByUsername(username) && repo.existsByEmail(email)) {
             User user = repo.findByUsername(username);
             repo.delete(user);
-            return true;
+            return new ApiMessage(HttpStatus.OK,"User Successfully deleted!!", usermapping.Usertouserdto(user));
         }
-        else throw new Usernamenotfoundexception("Please enter valid username, given username does not exist!!");
+        return new ApiMessage(HttpStatus.BAD_REQUEST,"Username not found!!");
+
     }
 
-    public List<User> getalluser() {
+    public ApiMessage getalluser() {
 
-        return repo.findAll();
+        List<User> listofuser=repo.findAll();
+        ApiMessage apiMessage= new ApiMessage(HttpStatus.OK,usermapping.listofusertoDto(listofuser));
+        return apiMessage;
     }
-    public boolean updateuser(Updaterequest request) throws  Usernamenotfoundexception
+    public ApiMessage updateuser(Updaterequest request) throws  Usernamenotfoundexception
     {
         if(repo.existsByEmail(request.getEmail())&&repo.existsByUsername(request.getUsername()))
         {
-            User user= repo.findByUsername(request.getUsername());
-            user.setUser_mobile(request.getUser_mobile());
-            user.setUser_type(request.getUser_type());
-            user.setAge(request.getAge());
-            user.setGender(request.getGender());
-            user.setEmail(request.getEmail());
-            user.setPassword(request.getPassword());
-            user.setReenter_password(request.getReenter_password()) ;
-            repo.save(user);
-            return true;
+            repo.save(usermapping.updateusertoUser(request));
+            return new ApiMessage(HttpStatus.OK,"User updated!!");
 
         }
-       else throw new Usernamenotfoundexception("Given usernamedoes not exist!!");
+       return new ApiMessage(HttpStatus.BAD_REQUEST, "User does not exist!!");
 
     }
 
