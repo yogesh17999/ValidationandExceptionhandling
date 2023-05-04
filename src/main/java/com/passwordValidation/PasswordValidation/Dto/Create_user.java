@@ -1,11 +1,15 @@
 package com.passwordValidation.PasswordValidation.Dto;
 
+import com.passwordValidation.PasswordValidation.Model.Address;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,4 +31,8 @@ public class Create_user {
     private String password;
     private String reenter_password;
     private String user_type;
+    private LocalDate date;
+    private boolean statusofuser;
+    private List<addressdto> address;
+
 }
