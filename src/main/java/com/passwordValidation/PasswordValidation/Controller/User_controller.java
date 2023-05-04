@@ -21,7 +21,7 @@ public class User_controller {
     @PostMapping("/register")
     public ResponseEntity<?> RegisterUser(@RequestBody @Valid Create_user request)
     {
-        System.out.println(request.getUsername());
+        //System.out.println(request.getUsername());
         ApiMessage apiMessage =service.Createuser(request);
         return ResponseEntity.status(apiMessage.getStatuscode()).body(apiMessage);
     }

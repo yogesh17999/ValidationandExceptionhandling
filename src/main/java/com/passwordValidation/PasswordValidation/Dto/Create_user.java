@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -30,6 +31,8 @@ public class Create_user {
     private String password;
     private String reenter_password;
     private String user_type;
-    @NotBlank
-    private List<Address> address;
+    private LocalDate date;
+    private boolean statusofuser;
+    private List<addressdto> address;
+
 }

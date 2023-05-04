@@ -17,6 +17,8 @@ public class Address {
     private int pincode;
     private String Landmark;
     private String area;
+    private String type;
+
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
